@@ -5,8 +5,6 @@ on:
       - main
   pull_request:
     types: [opened, synchronize, reopened]
-    paths:
-      - "src/**"
 jobs:
   build:
     name: Build and analyze
@@ -46,6 +44,6 @@ jobs:
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"MartinObrecht_MeuBlog" /o:"martinobrecht" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
-          dotnet build
+          dotnet build --project src/MeuBlog.Api/MeuBlog.Api.csproj --no-incremental
           dotnet -coverage collect "dotnet test" -f xml -o "coverage.xml"
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
